@@ -2,6 +2,7 @@
    body {
     background: #fffffe;
     color:#073472;
+
    }
 
    h1 {
@@ -37,9 +38,8 @@
     font-size: 45px;
     border-radius: 10px;
     font-family: 'Caveat', cursive;
-    position: relative;
-    left: 450px;
-    top: 60px;
+    display: block;
+    margin: auto;
     
   }
   
