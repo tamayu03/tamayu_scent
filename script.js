@@ -1,7 +1,41 @@
-'use strict'
+new Vue({
+  el:"#app",
+  data: {
+    showContent : false
+  },
+  methods:{
+    openModal: function(){
+      this.showContent = true
+    },
+    closeModal: function(){
+      this.showContent = false
+    }
+  }
+})
 
-const buttonOpen = document.getElementById('modalOpen');
-const modal = document.getElementById('easyModal');
+//openModalコンポーネント
+  Vue.component('openModal',{
+
+    template:`
+    <div id="overlay" v-on:click="clickEvent">
+      <div id ="content" v-on:click="stopEvent">
+        <p><slot></slot></p>
+        <button v-on:click="clickEvent">close</button>
+      </div>
+    </div>
+    `,
+
+    methods :{
+      clickEvent: function(){
+        // 子コンポーネントから親コンポーネントへの通知
+        this.$emit('from-child')
+      },
+      stopEvent: function(){
+        event.stopPropagation()
+      }
+    }
+
+  })
 
 
 // ボタンがクリックされた時

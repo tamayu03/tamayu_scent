@@ -26,20 +26,101 @@
     <input type="radio" name="q2" value="c">集中したい
   </form>
 
-  <button id="modalOpen" class="button">Click!!!</button>
-  <div id="easyModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>🍬🍬診断結果🍬🍬</h2>
-      </div>
-      <div class="modal-body">
-        <p>結果</p>
-      </div>
+ 
+  <div id="app">
+    <button id=result-button v-on:click="openModal">Click</button>
+    <open-modal v-show="showContent" v-on:from-child="closeModal"/>
+    <h2>🍬🍬診断結果🍬🍬</h2>
+    <p id="result-diagnose"></p>
     </div>
   </div>
- 
 
       
-<script type="text/javascript" src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+
+new Vue({
+  el:"#app",
+  data: {
+    showContent : false
+  },
+  methods:{
+    openModal: function(){
+      
+      // ラジオボタンの要素を取得して文字列にする
+      const form = document.forms.question;
+	      const q0Value = form.q0.value;
+	      const q1Value = form.q1.value;
+	      const q2Value = form.q2.value;
+	      const resultValue = q0Value + q1Value + q2Value;
+
+      // モーダルの中の結果要素＝pタグを取得する
+      const resultModal = document.getElementById("result-diagnose");
+
+      // resultValueの結果で表示内容を変える
+      if (resultValue === "aaa" || resultValue === "aba"){
+        resultModal.innerText = "Diptyque オーローズ "
+      }
+
+      else if (resultValue === "aab" || resultValue === "abc"){
+        resultModal.innerText = "Fuegia エンデバー"
+      }
+
+      else if (resultValue === "aac"){
+        resultModal.innerText = "Guerlain ハーバ フレスカ"
+      }
+  
+      else if (resultValue === "abb" ){
+        resultModal.innerText = "OFFICINE UNIVERSELLE BULY ヴァルパンソンの浴女"
+      }
+
+      else if (resultValue === "baa" || resultValue === "bac"){
+        resultModal.innerText = "canoma 早蕨"
+      }
+
+      else if (resultValue.charAt(0) === "b"){
+        resultModal.innerText = "L'Orchestre Parfum ピアノサンタル"
+      }
+  
+      else {
+        resultModal.innerText = "Guerlain オースクレット"
+      }
+       
+      this.showContent = true
+
+    },
+
+    closeModal: function(){
+      this.showContent = false
+    }
+  }
+})
+
+//openModalコンポーネント
+  Vue.component('openModal',{
+
+    template:`
+    <div id="overlay" v-on:click="clickEvent">
+      <div id ="content" v-on:click="stopEvent">
+        <p><slot></slot></p>
+        <button v-on:click="clickEvent">close</button>
+      </div>
+    </div>
+    `,
+
+    methods :{
+      clickEvent: function(){
+        // 子コンポーネントから親コンポーネントへの通知
+        this.$emit('from-child')
+      },
+      stopEvent: function(){
+        event.stopPropagation()
+      }
+    }
+
+  })
+
+</script>
 </body>
 </html>
